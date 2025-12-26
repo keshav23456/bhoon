@@ -88,6 +88,41 @@ const transactionSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 const Transaction = mongoose.model('Transaction', transactionSchema);
 
+// Fix old schema issues - drop all problematic indexes
+const fixOldIndexes = async () => {
+  try {
+    const indexes = await User.collection.getIndexes();
+    const indexesToDrop = [];
+    
+    // Find all indexes except _id_ (which is required)
+    for (const indexName in indexes) {
+      if (indexName !== '_id_') {
+        indexesToDrop.push(indexName);
+      }
+    }
+    
+    if (indexesToDrop.length > 0) {
+      console.log('🔧 Dropping old indexes:', indexesToDrop.join(', '));
+      for (const indexName of indexesToDrop) {
+        await User.collection.dropIndex(indexName);
+      }
+      console.log('✅ All old indexes removed');
+    } else {
+      console.log('✓ No old indexes to clean up');
+    }
+  } catch (error) {
+    // Collection doesn't exist yet or other error - that's fine
+    console.log('✓ No old indexes to clean up');
+  }
+};
+
+// Call fix when database is connected
+if (mongoose.connection.readyState === 1) {
+  fixOldIndexes();
+} else {
+  mongoose.connection.once('open', fixOldIndexes);
+}
+
 // API Routes
 
 // Get all users
@@ -158,6 +193,26 @@ app.get('/api/users/:id/transactions', async (req, res) => {
     const transactions = await Transaction.find({ userId: req.params.id })
       .sort({ date: -1, createdAt: -1 });
     res.json(transactions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete user
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Delete all transactions for this user
+    await Transaction.deleteMany({ userId: req.params.id });
+    
+    // Delete the user
+    await User.findByIdAndDelete(req.params.id);
+
+    res.json({ message: 'User and all transactions deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
