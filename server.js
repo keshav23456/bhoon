@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB Connection
 const connectDB = async () => {
@@ -268,8 +268,12 @@ app.post('/api/users/:id/transactions', async (req, res) => {
   }
 });
 
-// Serve frontend
+// Serve frontend (only for non-API routes)
 app.get('*', (req, res) => {
+  // Don't serve HTML for API routes
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API route not found' });
+  }
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
