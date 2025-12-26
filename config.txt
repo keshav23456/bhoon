@@ -1,0 +1,39 @@
+========================================
+MONGODB SETUP INSTRUCTIONS
+========================================
+
+PASTE YOUR MONGODB CONNECTION STRING HERE:
+(Replace the line below with your actual MongoDB URI)
+
+MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/dukanLedger?retryWrites=true&w=majority
+
+
+HOW TO GET MONGODB CONNECTION STRING:
+----------------------------------------
+1. Go to https://www.mongodb.com/cloud/atlas
+2. Sign up/Login (Free tier is sufficient)
+3. Create a new cluster (if you don't have one)
+4. Click "Connect" button
+5. Choose "Connect your application"
+6. Copy the connection string
+7. Replace <password> with your database user password
+8. Paste it above
+
+QUICK START COMMANDS:
+----------------------------------------
+1. Install dependencies:
+   npm install
+
+2. Copy your MongoDB URI from above to .env file (see README.md)
+
+3. Start the server:
+   npm start
+
+4. Open in browser:
+   http://localhost:3000
+
+5. For mobile testing (on same WiFi):
+   http://YOUR_COMPUTER_IP:3000
+
+========================================
+

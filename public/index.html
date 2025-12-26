@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dukan Ledger</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>📊 Dukan Ledger</h1>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Add User Section -->
+            <section class="section add-user-section" id="addUserSection">
+                <h2>Add New User</h2>
+                <form id="addUserForm" class="form">
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            id="userName" 
+                            placeholder="Enter user name" 
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                </form>
+            </section>
+
+            <!-- Search Section -->
+            <section class="section search-section">
+                <h2>Search User</h2>
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="🔍 Search by name..." 
+                        autocomplete="off"
+                    >
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </section>
+
+            <!-- User Details Section -->
+            <section class="section user-details-section" id="userDetailsSection" style="display: none;">
+                <div class="user-header">
+                    <button class="btn-back" id="backBtn">← Back</button>
+                    <h2 id="userDetailName">User Name</h2>
+                    <div class="balance-display">
+                        <span class="balance-label">Balance:</span>
+                        <span id="userBalance" class="balance-amount">₹0</span>
+                    </div>
+                </div>
+
+                <!-- Add Transaction Form -->
+                <div class="transaction-form">
+                    <h3>Add Transaction</h3>
+                    <form id="transactionForm" class="form">
+                        <div class="form-group">
+                            <label for="transactionDate">Date</label>
+                            <input 
+                                type="date" 
+                                id="transactionDate" 
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transactionAmount">Amount (₹)</label>
+                            <input 
+                                type="number" 
+                                id="transactionAmount" 
+                                placeholder="0" 
+                                step="0.01"
+                                min="0.01"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transactionDescription">Description (Optional)</label>
+                            <input 
+                                type="text" 
+                                id="transactionDescription" 
+                                placeholder="Enter description"
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success" data-type="credit">
+                                ✓ Credit
+                            </button>
+                            <button type="submit" class="btn btn-danger" data-type="debit">
+                                ✗ Debit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="transaction-history">
+                    <h3>Transaction History</h3>
+                    <div id="transactionList" class="transaction-list"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
